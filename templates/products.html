@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Каталог товаров</h2>
+
+<form method="get" action="/products" class="category-form">
+    <input type="text" name="category" placeholder="Категория, например: Electronics" value="{{ request.query_params.get('category', '') }}">
+    <input type="text" name="name" placeholder="Название товара" value="{{ request.query_params.get('name', '') }}">
+    <button type="submit">Поиск</button>
+</form>
+
+{% if products %}
+    <div class="products-container">
+        {% for product in products %}
+            <div class="product-card">
+                <a href="/products/{{ product._id }}">
+                    {% if product.image_url %}
+                        <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <img src="/static/no_image.png" alt="Нет изображения">
+                    {% endif %}
+                    <div class="product-info">
+                        <h4>{{ product.name }}</h4>
+                        <p>{{ product.description }}</p>
+                        <p class="price">{{ product.price }} ₸</p>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p style="text-align:center;">Нет товаров</p>
+{% endif %}
+{% endblock %}

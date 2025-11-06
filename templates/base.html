@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title or "E-Commerce" }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background 0.2s ease;
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        .logout-btn {
+            background-color: #d9534f;
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background-color: #c9302c;
+        }
+
+        main {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <h1>E-Commerce</h1>
+        <nav>
+            <a href="/">Главная</a>
+            <a href="/products">Товары</a>
+            {% if user %}
+                <a href="/profile">{{ user.name }}</a>
+                <a href="/logout" class="logout-btn">Выйти</a>
+            {% else %}
+                <a href="/login">Войти</a>
+                <a href="/register">Регистрация</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

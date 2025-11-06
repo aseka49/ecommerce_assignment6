@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .auth-card {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .auth-card h2 {
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .auth-card form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .auth-card input {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .auth-card input:focus {
+            outline: none;
+            border-color: #2a7;
+            box-shadow: 0 0 5px rgba(42, 170, 119, 0.5);
+        }
+
+        .auth-card button {
+            padding: 12px;
+            background-color: #2a7;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .auth-card button:hover {
+            background-color: #238a4f;
+        }
+
+        .auth-footer {
+            margin-top: 15px;
+            color: #555;
+        }
+
+        .auth-footer a {
+            color: #2a7;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-card">
+        <h2>Вход</h2>
+        <form action="/login" method="post">
+            <input type="email" name="email" placeholder="Введите email" required>
+            <input type="password" name="password" placeholder="Введите пароль" required>
+            <button type="submit">Войти</button>
+        </form>
+        <p class="auth-footer">
+            Нет аккаунта? <a href="/register">Зарегистрироваться</a>
+        </p>
+    </div>
+</body>
+</html>
