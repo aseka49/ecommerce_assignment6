@@ -10,8 +10,17 @@
             <p>{{ product.description }}</p>
             <h4>Цена: <strong>{{ product.price }} ₸</strong></h4>
             <a href="/products" class="btn">← Назад к товарам</a>
-            <button>Добавить в корзину</button>
+            <button id="like-button" class="like-btn">❤️ Нравится</button>
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById("like-button").addEventListener("click", async () => {
+    const response = await fetch(`/like/{{ product._id }}`, { method: "POST" });
+    const data = await response.json();
+    const btn = document.getElementById("like-button");
+    btn.textContent = data.liked ? "💔Убрать из понравившихся" : "❤️Нравится";
+});
+</script>
 {% endblock %}

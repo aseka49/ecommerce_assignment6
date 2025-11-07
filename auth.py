@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Request, HTTPException, Depends, Form, Cookie
+from fastapi import APIRouter, Request, HTTPException, status, Form, Cookie
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
+from datetime import datetime
 import bcrypt
 from db.db_connection import get_connection
 
@@ -17,7 +18,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
-# ---------- HTML страницы ----------
+# HTML страницы
 @router.get("/register", response_class=HTMLResponse)
 def register_page(request: Request):
     return templates.TemplateResponse("register.html", {"request": request})
@@ -28,7 +29,7 @@ def login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 
-# ---------- API регистрация ----------
+# API регистрация
 @router.post("/register")
 def register_user(name: str = Form(...), email: str = Form(...), password: str = Form(...)):
     if users_collection.find_one({"email": email}):
@@ -40,12 +41,15 @@ def register_user(name: str = Form(...), email: str = Form(...), password: str =
         "email": email,
         "password": hashed_pw,
         "history": [],
+        "liked_products": [],
+        "registration_date": datetime.utcnow(),
+        "role": "user"
     }
     users_collection.insert_one(user_data)
     return RedirectResponse(url="/login", status_code=303)
 
 
-# ---------- API вход ----------
+# API вход
 @router.post("/login")
 def login(email: str = Form(...), password: str = Form(...)):
     db_user = users_collection.find_one({"email": email})
@@ -84,3 +88,7 @@ def get_current_user(access_token: str = Cookie(None)):
 
     return user
 
+
+def required_admin(user: dict):
+    if user.get("role") != "admin":
+        return RedirectResponse(url='/', status_code=303)

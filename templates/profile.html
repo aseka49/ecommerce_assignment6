@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h2>Профиль пользователя</h2>
+    </div>
+
+    <div class="profile-info">
+        <p><strong>Имя:</strong> {{ user.name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Дата регистрации:</strong>
+            {{ user.registration_date.strftime('%d.%m.%Y') if user.registration_date else '—' }}
+        </p>
+    </div>
+
+    {% if liked_products %}
+    <div>
+        <p class="section-title">Товары, которые вам понравились:</p>
+        <div class="products-container">
+            {% for p in liked_products %}
+            <div class="product-card">
+                <a href="/products/{{ p._id }}">
+                    {% if p.image_url %}
+                        <img src="{{ p.image_url }}" alt="{{ p.name }}">
+                    {% else %}
+                        <img src="/static/no_image.png" alt="Нет изображения">
+                    {% endif %}
+                    <div class="product-info">
+                        <h4>{{ p.name }}</h4>
+                        <p class="price">{{ p.price }} ₸</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if categories %}
+    <div class="categories-section">
+        <p class="section-title">Категории, которые вам интересны:</p>
+        <ul class="category-list">
+            {% for c in categories %}
+            <li>{{ c }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -4,13 +4,15 @@ from fastapi.templating import Jinja2Templates
 from db.db_connection import get_connection
 from bson import ObjectId
 from auth import get_current_user
+from datetime import datetime
+
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 db = get_connection()
 products_collection = db["products"]
 users_collection = db["users"]
-
+interaction_collection = db["interaction"]
 
 @router.get("/products", response_class=HTMLResponse)
 def get_products(
@@ -44,9 +46,26 @@ def product_detail(request: Request, product_id: str, user: dict = Depends(get_c
 
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
+
+    interaction_collection.update_one(
+        {"user_id": ObjectId(user["_id"]), "product_id": ObjectId(product_id)},
+        {
+            "$set": {
+                "type": "view",
+                "timestamp": datetime.utcnow()
+            }
+        },
+        upsert=True
+    )
+
     users_collection.update_one(
         {"_id": user["_id"]},
-        {"$push": {"history": {"product_id": product_id, "action": "view", "category": product["category"]}}}
+        {"$push": {"history": {
+            "product_id": product_id,
+            "action": "view",
+            "category": product["category"],
+            "timestamp": datetime.utcnow()
+        }}}
     )
 
     return templates.TemplateResponse(
